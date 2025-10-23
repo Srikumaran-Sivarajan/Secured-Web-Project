@@ -1,10 +1,12 @@
 import User from "../models/user.model..js";
+import asyncWrapperFunction from "../utils/asyncWrapperFunction.js";
+import AppError from "../utils/Exceptions.js";
 
 export async function signInUser(req, res, next) {
   try {
     const { username, email, password } = req.body;
 
-    // 1️⃣ Validate input
+    
     if (!username || !email || !password) {
       throw new Error("All feilds required");
     }
@@ -32,10 +34,17 @@ export async function signInUser(req, res, next) {
 }
 
 
-export async function logInUser(req, res, next){
-  try{
+export const logInUser = asyncWrapperFunction(async(req, res, next) => {
+  const {email, password} = req.body;
 
-  } catch(err){
+  if(email && password) throw new AppError("All feilds are required", 400 );
 
-  }
-}
+  const user = await User.findOne({email});
+
+  if(!user) throw new AppError("Email not Avialable",404 );
+
+  if(!user.comparePassword(password)) throw new AppError("Invalid Credentials", 401);
+
+  
+
+});

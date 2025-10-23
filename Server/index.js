@@ -25,10 +25,14 @@ app.use((req, res, next) => {
 app.use((error, req, res, next) => {
     error.statusCode = error.statusCode || 500;
     error.status = error.status || "error"
-    return res.status(error.statusCode).json({
+    const timestamp = new Date().toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    });
+    res.status(error.statusCode).json({
         status:"failed",
-        message:"Error occured",
-        conten:error.message
+        message:error.message,
+        stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+        timestamp
     })
 });
 
