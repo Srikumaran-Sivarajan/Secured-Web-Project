@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./config/db.config.js";
 import CORS from "cors";
 import dotenv from "dotenv";
+import { auth } from "./routes/index.js";
 dotenv.config();
 const app = express();
 
@@ -12,6 +13,8 @@ app.get("/",(req, res)=>{
         message:"Hello"
     })
 })
+
+app.use("/v1/api",auth);
 
 app.use((req, res, next) => {
   const error = new Error(`No route found at ${req.originalUrl}`);
@@ -24,7 +27,8 @@ app.use((error, req, res, next) => {
     error.status = error.status || "error"
     return res.status(error.statusCode).json({
         status:"failed",
-        message:"Error occured"
+        message:"Error occured",
+        conten:error.message
     })
 });
 

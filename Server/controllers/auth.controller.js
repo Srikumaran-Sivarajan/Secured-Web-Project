@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import User from "../models/user.model..js";
 
 export async function signInUser(req, res, next) {
   try {
@@ -6,7 +6,7 @@ export async function signInUser(req, res, next) {
 
     // 1️⃣ Validate input
     if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      throw new Error("All feilds required");
     }
 
     // 2️⃣ Check if email exists
@@ -26,6 +26,16 @@ export async function signInUser(req, res, next) {
     });
   } catch (error) {
     // 5️⃣ Forward to global error handler
+    console.log(error.message);
     next(error);
+  }
+}
+
+
+export async function logInUser(req, res, next){
+  try{
+
+  } catch(err){
+
   }
 }

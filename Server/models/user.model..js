@@ -30,14 +30,17 @@ const UserSchema = new Schema({
         required:true,
         match:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     },
-    otp:Otp,
+    otp:{
+      type: Otp, // ✅ Must be OtpSchema, not Otp
+      default: () => ({}), // to avoid undefined issues
+    },
     isActive:{
         type:Boolean,
         default:true
     }
 },{timestamps:true})
 
-UserSchema.pre('save',function(){
+UserSchema.pre('save',function(next){
     if (!this.isModified("password")) return next();
     const hash = bcrypt.hashSync(this.get("password"), 10);
     this.password = hash;
