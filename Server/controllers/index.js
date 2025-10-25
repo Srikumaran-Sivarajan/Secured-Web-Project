@@ -1,6 +1,8 @@
-import { signInUser } from "./auth.controller.js";
+import { signInUser, logInUser, getAccessToken } from "./auth.controller.js";
 
 
 export {
     signInUser as signIn,
+    logInUser as logIn,
+    getAccessToken
 }

@@ -3,18 +3,24 @@ import connectDB from "./config/db.config.js";
 import CORS from "cors";
 import dotenv from "dotenv";
 import { auth } from "./routes/index.js";
+import cookieParser from "cookie-parser";
+import basicSecure from "./midleware/basicSecure.js";
 dotenv.config();
 const app = express();
 
 app.use(express.json())
 app.use(CORS())
+app.use(cookieParser());
+
+
+app.use("/v1/api",auth);
+
+app.use(basicSecure);
 app.get("/",(req, res)=>{
     res.send({
         message:"Hello"
     })
 })
-
-app.use("/v1/api",auth);
 
 app.use((req, res, next) => {
   const error = new Error(`No route found at ${req.originalUrl}`);
